@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self' https://generativelanguage.googleapis.com;">
 <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 <meta http-equiv="X-Frame-Options" content="DENY">
 <title>AegixChain AI | Cybersecurity</title>
@@ -142,6 +142,42 @@ footer{padding:3rem 5%;display:flex;justify-content:space-between;font-family:'D
 .anim-logo-ctx .wm-name .ai { font-size: 22px; color: #8ba8b5; vertical-align: super; margin-left: 3px; }
 .anim-logo-ctx .wm-tag { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 4px; color: #2a5060; margin-top: 9px; text-transform: uppercase; }
 .anim-logo-ctx .divider { width: 220px; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,229,192,0.28), transparent); animation: bg-fade-up 0.5s 2.6s ease both; opacity: 0; animation-fill-mode: forwards; }
+/* --- AI Chatbot Widget --- */
+.chat-fab{position:fixed;bottom:90px;right:30px;width:56px;height:56px;border-radius:50%;background:var(--card);border:1.5px solid rgba(0,229,192,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:9998;transition:.3s;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.chat-fab:hover{border-color:var(--cyan);transform:scale(1.08);box-shadow:0 4px 25px rgba(0,229,192,.2)}
+.chat-fab svg{width:28px;height:28px}
+.chat-fab .notif-dot{position:absolute;top:4px;right:4px;width:10px;height:10px;background:var(--cyan);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.5}}
+.chat-panel{position:fixed;bottom:160px;right:30px;width:380px;max-height:520px;background:var(--card);border:1px solid rgba(0,229,192,0.2);border-radius:12px;z-index:9998;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateY(20px) scale(.96);transition:.3s;box-shadow:0 12px 48px rgba(0,0,0,.6)}
+.chat-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.chat-header{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.2);border-radius:12px 12px 0 0}
+.chat-header svg{width:24px;height:24px;flex-shrink:0}
+.chat-header-info{flex:1}
+.chat-header-name{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;color:#fff}
+.chat-header-status{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--cyan)}
+.chat-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;transition:.2s;padding:4px}
+.chat-close:hover{color:var(--cyan)}
+.chat-wip{padding:8px 16px;background:rgba(0,229,192,0.08);border-bottom:1px solid rgba(0,229,192,0.1);font-family:'DM Mono',monospace;font-size:.7rem;color:var(--cyan);text-align:center}
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:240px;max-height:320px}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.chat-msg{max-width:85%;padding:10px 14px;border-radius:10px;font-size:.85rem;line-height:1.55;word-wrap:break-word;white-space:pre-wrap}
+.chat-msg.bot{align-self:flex-start;background:var(--surface);border:1px solid rgba(255,255,255,.05);color:var(--text)}
+.chat-msg.user{align-self:flex-end;background:rgba(0,229,192,0.15);border:1px solid rgba(0,229,192,0.2);color:#fff}
+.chat-msg.bot .thinking{color:var(--muted);font-style:italic;font-size:.78rem}
+.chat-typing{align-self:flex-start;display:flex;gap:4px;padding:10px 14px}
+.chat-typing span{width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:typingDot 1.4s ease-in-out infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+@keyframes typingDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+.chat-input-area{display:flex;gap:8px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.15);border-radius:0 0 12px 12px}
+.chat-input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:10px 12px;color:#fff;font-family:'DM Sans',sans-serif;font-size:.85rem;resize:none;outline:none;transition:.2s}
+.chat-input:focus{border-color:rgba(0,229,192,0.3)}
+.chat-input::placeholder{color:var(--muted)}
+.chat-send{width:38px;height:38px;background:var(--cyan);border:none;border-radius:6px;color:#000;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.chat-send:hover{opacity:.85}
+.chat-send:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:500px){.chat-panel{right:10px;left:10px;width:auto;bottom:140px;max-height:70vh}}
 </style>
 </head>
 <body>
@@ -206,8 +242,8 @@ footer{padding:3rem 5%;display:flex;justify-content:space-between;font-family:'D
             <circle cx="140" cy="140" r="42" fill="url(#bg-cg)"/>
             <circle cx="140" cy="140" r="30" fill="#080b10" stroke="#00e5c0" stroke-width="2"/>
             <circle class="core-fill" cx="140" cy="140" r="22" fill="#00e5c0"/>
-            <circle cx="140" cy=\"140\" r=\"8.5\" fill=\"#080b10\"/>
-            <circle cx=\"137\" cy=\"137\" r=\"3\" fill=\"#00e5c0\" opacity=\"0.45\"/>
+            <circle cx="140" cy="140" r="8.5" fill="#080b10"/>
+            <circle cx="137" cy="137" r="3" fill="#00e5c0" opacity="0.45"/>
           </g>
         </svg>
       </div>
@@ -231,13 +267,13 @@ footer{padding:3rem 5%;display:flex;justify-content:space-between;font-family:'D
               <stop offset="0%" stop-color="#00e5c0" stop-opacity="0.40"/>
               <stop offset="100%" stop-color="#00e5c0" stop-opacity="0"/>
             </radialGradient>
-            <clipPath id="bg-hc">
+            <clipPath id="nav-hc">
               <polygon points="140,28 237,84 237,196 140,252 43,196 43,84"/>
             </clipPath>
           </defs>
           <g class="ring-deco"><polygon points="140,16 248,78 248,202 140,264 32,202 32,78" stroke="#00e5c0" stroke-width="0.7" fill="none" stroke-dasharray="8 14" stroke-linejoin="round" opacity="0.20" class="dp-deco"/></g>
           <polygon points="140,28 237,84 237,196 140,252 43,196 43,84" stroke="#00e5c0" stroke-width="2.5" fill="rgba(0,229,192,0.04)" stroke-linejoin="round" class="dp-outer"/>
-          <rect class="scan-line" x="43" y="139" width="194" height="2" fill="#00e5c0" opacity="0" clip-path="url(#bg-hc)"/>
+          <rect class="scan-line" x="43" y="139" width="194" height="2" fill="#00e5c0" opacity="0" clip-path="url(#nav-hc)"/>
           <g class="ring-mid"><polygon points="140,68 202,104 202,176 140,212 78,176 78,104" stroke="#00e5c0" stroke-width="1.5" fill="none" stroke-linejoin="round" opacity="0.52" class="dp-mid"/></g>
           <line x1="140" y1="28" x2="140" y2="68" stroke="#00e5c0" stroke-width="1.1" opacity="0.42" pathLength="1" class="dl t-o2m"/>
           <line x1="237" y1="84" x2="202" y2="104" stroke="#00e5c0" stroke-width="1.1" opacity="0.42" pathLength="1" class="dl t-o2m"/>
@@ -282,8 +318,8 @@ footer{padding:3rem 5%;display:flex;justify-content:space-between;font-family:'D
             <circle cx="140" cy="140" r="42" fill="url(#nav-cg)"/>
             <circle cx="140" cy="140" r="30" fill="#080b10" stroke="#00e5c0" stroke-width="2"/>
             <circle class="core-fill" cx="140" cy="140" r="22" fill="#00e5c0"/>
-            <circle cx="140" cy=\"140\" r=\"8.5\" fill=\"#080b10\"/>
-            <circle cx=\"137\" cy=\"137\" r=\"3\" fill=\"#00e5c0\" opacity=\"0.45\"/>
+            <circle cx="140" cy="140" r="8.5" fill="#080b10"/>
+            <circle cx="137" cy="137" r="3" fill="#00e5c0" opacity="0.45"/>
           </g>
         </svg>
       </div>
@@ -388,15 +424,51 @@ footer{padding:3rem 5%;display:flex;justify-content:space-between;font-family:'D
   </div>
 </section>
 
-<div style="text-align:center;padding:4rem 5% 2rem;position:relative;z-index:1">
-  <h2 style="font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1">Coming <span style="color:var(--cyan)">Soon</span></h2>
+<div style="position:relative;z-index:1;padding:4rem 5% 2rem">
+  <h2 style="font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-0.03em;line-height:1.1;text-align:center">Coming <span style="color:var(--cyan)">Soon</span></h2>
+  <div style="text-align:right;margin-top:2rem">
+    <a href="https://github.com/shashankv762" target="_blank" rel="noopener" style="text-decoration:none;font-family:'DM Mono',monospace;font-size:0.8rem;color:var(--muted);transition:color 0.2s">developed by <span style="color:var(--cyan)">shashankv762</span></a>
+  </div>
 </div>
 
 <footer id="about">
-  <div>&copy; 2025 AegixChain AI — Blockchain Security Intelligence</div>
+  <div>&copy; 2025–2026 AegixChain AI — Blockchain Security Intelligence</div>
   <ul class="f-links"><li><a href="https://github.com/AegixChain">GitHub</a></li><li><a href="#">Docs</a></li><li><a href="#">Privacy</a></li><li><a href="mailto:aegixchainai@gmail.com">Contact</a></li></ul>
 </footer>
 <a href="#" id="btt">↑</a>
+
+<!-- AI Chatbot Widget -->
+<div class="chat-fab" id="chatFab" title="Chat with AegixChain AI">
+  <span class="notif-dot"></span>
+  <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" fill="none" stroke="#00e5c0" stroke-width="1.5"/>
+    <polygon points="18,8 28,13 28,23 18,28 8,23 8,13" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="1"/>
+    <circle cx="18" cy="18" r="3" fill="#00e5c0"/>
+  </svg>
+</div>
+
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" fill="none" stroke="#00e5c0" stroke-width="1.5"/>
+      <polygon points="18,8 28,13 28,23 18,28 8,23 8,13" fill="rgba(0,229,192,0.1)" stroke="#00e5c0" stroke-width="1"/>
+      <circle cx="18" cy="18" r="3" fill="#00e5c0"/>
+    </svg>
+    <div class="chat-header-info">
+      <div class="chat-header-name">Aegix<span class="txt-c">Chain</span> AI</div>
+      <div class="chat-header-status">● online — gemini-2.0-flash</div>
+    </div>
+    <button class="chat-close" id="chatClose">✕</button>
+  </div>
+  <div class="chat-wip">🚧 This AI assistant is still in progress — responses may be limited</div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg bot">Hello! I'm the AegixChain AI assistant. Ask me anything about blockchain security, our defense layers, or how AegixChain protects your network.</div>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask about blockchain security..." autocomplete="off">
+    <button class="chat-send" id="chatSend" title="Send">➤</button>
+  </div>
+</div>
 
 <div class="modal-overlay" id="loginModal">
   <div class="login-box">
@@ -430,19 +502,14 @@ footer{padding:3rem 5%;display:flex;justify-content:space-between;font-family:'D
   document.querySelectorAll('.stats').forEach(el => stObs.observe(el));
 
   // Admin Auth Simulation
+  // WARNING: Real authentication MUST be handled server-side.
+  // This is a UI demo only — no credentials are validated client-side.
   const authSubmit = document.getElementById('authSubmit'), authEmail = document.getElementById('authEmail'), authKey = document.getElementById('authKey'), authError = document.getElementById('authError');
   if(authSubmit) {
     authSubmit.addEventListener('click', () => {
-      // Simulate generic frontend check. Do not put real backend logic here.
-      if(authEmail.value.trim() === 'blueparasite1234@gmail.com' && authKey.value.length >= 8) {
-        authSubmit.innerText = "Access Granted...";
-        authSubmit.style.background = "var(--green)";
-        authError.style.display = "none";
-        setTimeout(() => alert("Welcome Admin: blueparasite1234@gmail.com\n\n[Session Token Generated. Connect to Backend Layer 4.]"), 600);
-      } else {
-        authError.style.display = "block";
-        authKey.value = "";
-      }
+      // Always show unauthorized — real auth must be via a backend API
+      authError.style.display = "block";
+      authKey.value = "";
     });
   }
 
@@ -500,6 +567,138 @@ footer{padding:3rem 5%;display:flex;justify-content:space-between;font-family:'D
     updateLastAttack();
     setInterval(updateLastAttack, 1000);
   }
+
+
+  // --- AI Chatbot ---
+  const chatFab = document.getElementById('chatFab');
+  const chatPanel = document.getElementById('chatPanel');
+  const chatClose = document.getElementById('chatClose');
+  const chatMessages = document.getElementById('chatMessages');
+  const chatInput = document.getElementById('chatInput');
+  const chatSend = document.getElementById('chatSend');
+
+  // Gemini API — get a free key at https://aistudio.google.com/apikey
+  const GEMINI_API_KEY = 'AIzaSyCO_NJ-utP4tTqBEEz40sIUhPncJt99aMk';
+  const GEMINI_MODEL = 'gemini-2.0-flash';
+  const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent?key=' + GEMINI_API_KEY;
+
+  const SYSTEM_PROMPT = 'You are AegixChain AI, an intelligent cybersecurity assistant specializing in blockchain security. You help users understand blockchain threats, defense mechanisms, smart contract vulnerabilities, and how AegixChain\'s five-layer defense system protects blockchain networks. Be concise, professional, and technical when appropriate. If asked about topics outside blockchain security, politely redirect the conversation. Keep responses under 150 words.';
+
+  let chatHistory = [];
+  let isBusy = false;
+
+  if (chatFab) chatFab.addEventListener('click', () => chatPanel.classList.toggle('open'));
+  if (chatClose) chatClose.addEventListener('click', () => chatPanel.classList.remove('open'));
+
+  function addMessage(text, sender) {
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg ' + sender;
+    msg.textContent = text;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return msg;
+  }
+
+  function showTyping() {
+    const el = document.createElement('div');
+    el.className = 'chat-typing';
+    el.id = 'chatTyping';
+    el.innerHTML = '<span></span><span></span><span></span>';
+    chatMessages.appendChild(el);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return el;
+  }
+
+  function removeTyping() {
+    const el = document.getElementById('chatTyping');
+    if (el) el.remove();
+  }
+
+  async function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text || isBusy) return;
+
+    addMessage(text, 'user');
+    chatInput.value = '';
+    chatHistory.push({ role: 'user', parts: [{ text: text }] });
+    isBusy = true;
+    chatSend.disabled = true;
+
+    showTyping();
+
+    // Guard: no API key set
+    if (!GEMINI_API_KEY || GEMINI_API_KEY === 'PASTE_YOUR_GEMINI_API_KEY_HERE') {
+      removeTyping();
+      addMessage('🚧 AI assistant is not configured yet. Please set a Gemini API key.', 'bot');
+      isBusy = false;
+      chatSend.disabled = false;
+      return;
+    }
+
+    try {
+      const reqBody = JSON.stringify({
+        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: chatHistory,
+        generationConfig: {
+          temperature: 0.2,
+          topP: 0.7,
+          maxOutputTokens: 1024
+        }
+      });
+
+      // Retry logic for 429 rate-limit errors
+      let response, attempts = 0, maxRetries = 3;
+      while (attempts <= maxRetries) {
+        response = await fetch(GEMINI_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: reqBody
+        });
+        if (response.status !== 429 || attempts >= maxRetries) break;
+        attempts++;
+        await new Promise(r => setTimeout(r, Math.pow(2, attempts) * 1000)); // 2s, 4s, 8s
+      }
+
+      removeTyping();
+
+      if (!response.ok) {
+        const errText = await response.text().catch(() => 'Unknown error');
+        if (response.status === 429) {
+          addMessage('⏳ The AI is busy right now. Please wait a few seconds and try again.', 'bot');
+        } else {
+          addMessage('⚠️ Connection error (' + response.status + '). Please try again later.', 'bot');
+        }
+        console.error('Gemini API error:', response.status, errText);
+        isBusy = false;
+        chatSend.disabled = false;
+        return;
+      }
+
+      const data = await response.json();
+      const content = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+      if (content) {
+        addMessage(content, 'bot');
+        chatHistory.push({ role: 'model', parts: [{ text: content }] });
+      } else {
+        addMessage('I couldn\'t generate a response. Please try again.', 'bot');
+      }
+
+    } catch (err) {
+      removeTyping();
+      addMessage('⚠️ Network error. Please check your connection and try again.', 'bot');
+      console.error('Chat error:', err);
+    }
+
+    isBusy = false;
+    chatSend.disabled = false;
+    chatInput.focus();
+  }
+
+  if (chatSend) chatSend.addEventListener('click', sendMessage);
+  if (chatInput) chatInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
 
 })();
 </script>
